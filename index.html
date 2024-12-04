@@ -41,8 +41,8 @@
             background-color: black;
             padding: 20px;
             border: 1px solid #D8BFD8;
-            max-width: 90vw;
-            width: 90%;
+            max-width: 80vw;
+            width: 80%;
             cursor: move;
             z-index: 1000;
             box-sizing: border-box;
@@ -117,6 +117,10 @@
         function dragElement(el) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             el.onmousedown = dragMouseDown;
+            el.querySelector('.popup-close').onclick = function (e) {
+                e.stopPropagation();
+                closePopup(el.id);
+            };
             el.ontouchstart = dragMouseDown; // For mobile devices
 
             function dragMouseDown(e) {
@@ -125,8 +129,10 @@
                 pos3 = e.touches ? e.touches[0].clientX : e.clientX;
                 pos4 = e.touches ? e.touches[0].clientY : e.clientY;
                 document.onmouseup = closeDragElement;
+                document.onmousedown = null;
                 document.onmousemove = elementDrag;
                 document.ontouchend = closeDragElement;
+                document.ontouchstart = null;
                 document.ontouchmove = elementDrag;
             }
 
