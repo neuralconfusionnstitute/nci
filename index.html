@@ -24,7 +24,9 @@
             padding: 20px;
             text-align: left;
             display: flex;
-            gap: 15px;
+            flex-wrap: nowrap;
+            gap: 0px;
+            overflow-x: auto;
         }
         .menu a {
             margin-right: 15px;
@@ -50,6 +52,7 @@
             z-index: 1000;
             box-sizing: border-box;
             overflow-y: auto;
+            overflow: auto;
             max-height: 80vh;
             aria-hidden: true;
         }
