@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뉴럴 난독증 학회</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             background-color: black;
@@ -22,6 +23,8 @@
         .menu {
             padding: 20px;
             text-align: left;
+            display: flex;
+            gap: 15px;
         }
         .menu a {
             margin-right: 15px;
@@ -46,17 +49,25 @@
             cursor: move;
             z-index: 1000;
             box-sizing: border-box;
+            overflow-y: auto;
+            max-height: 80vh;
+            aria-hidden: true;
         }
         .popup-close {
             cursor: pointer;
             color: #D8BFD8;
             float: right;
+            aria-label: "팝업 닫기";
+        }
+        .random-text {
+            position: fixed;
+            color: #D8BFD8;
+            font-size: 1.2em;
+            z-index: 999;
+            cursor: pointer;
         }
         @media (max-width: 600px) {
-            .content {
-                padding: 10px;
-            }
-            .menu {
+            .content, .menu {
                 padding: 10px;
             }
             .popup {
@@ -69,15 +80,17 @@
 </head>
 <body>
     <div class="content">
-        <h3>뉴럴 난독증 학회에 오신 것을 환영합니다</h3>
+        <h3>뉴럴 난독증 학회</h3>
         <img src="https://www.hmmrmedia.com/wp-content/uploads/2017/09/nerve_cell-1030x579.jpg" alt="Nerve Cell" style="width: 80%; max-width: 400px; margin: 20px 0;">
-        <p>뉴럴 난독증 학회는 스놉에 경도되었던 과거를 청산하고자 하는 <a href="#" onclick="showPopup('workers')">두 직장인</a>의 의지로부터 발족되었다. 우리는 책더미와 논문더미 사이에서 정제된 자아를 찾는 것에 실패했다. 정보 과잉의 혼란 속에서 시청각적 자극과 의미 혹은 무의미를 무작위로 흡수하고, 자가검열 없이 하고싶은 모든 말들을 타이핑하면서 쓰레기같은 글을 무한대로 생산하고자 결심한다. 여기서 이루어지는 쓰레기 아카이빙은 의미 창출이 아닌 개인 콜렉션의 욕망 충족만을 목적으로 한다. 알고리즘의 배치에 분노하면서도 사실은 변태처럼 그 혼란을 즐기며 길들여지는 과정을 낱낱이 공개한다. <a href="#" onclick="showPopup('snobPopup')">스놉은 청산했다</a>. 대신 우리는 모든 것에 대한 자유로운 탐구만을 남긴다. 무한하고 의미 없는 하이퍼링크의 축제 속에서 여러분도 기꺼이 난독증을 즐기시기를 바란다. 아쉽게도 팝업을 연 이후에는 새로고침하기 전까지 종료할 수 없다. 이리저리 팝업을 치워가며 당신의 <a href="https://en.wikipedia.org/wiki/Proxemics" target="_blank">퍼스널 스페이스</a>를 확보하라. </p>
+        <p>뉴럴 난독증 학회는 스놉에 경도되었던 과거를 청산하고자 하는 <a href="#" onclick="showPopup('workers')">두 직장인</a>의 의지로부터 발족되었다. 우리는 책더미와 논문더미 사이에서 정제된 자아를 찾는 것에 실패했다. 정보 과잉의 혼란 속에서 시청각적 자극과 의미 혹은 무의미를 무작위로 흡수하고, 자가검열 없이 하고싶은 모든 말들을 타이핑하면서 쓰레기같은 글을 무한대로 생산하고자 결심한다. 여기서 이루어지는 쓰레기 아카이빙은 의미 창출이 아닌 개인 콜렉션의 욕망 충족만을 목적으로 한다. 알고리즘의 배치에 분노하면서도 사실은 변태처럼 그 혼란을 즐기며 길들여지는 과정을 낱낱이 공개한다. <a href="#" onclick="showPopup('snobPopup')">스놉은 청산했다</a>. 대신 우리는 모든 것에 대한 자유로운 탐구만을 남긴다. 무한하고 의미 없는 하이퍼링크의 축제 속에서 여러분도 기꺼이 난독증을 즐기시기를 바란다. 아쉽게도 팝업을 연 이후에는 새로고침하기 전까지 종료할 수 없다. 이리저리 팝업을 치워가며 당신의 <a href="https://en.wikipedia.org/wiki/Proxemics" target="_blank">퍼스널 스페이스</a>를 확보하라.</p>
     </div>
 
     <div class="menu">
         <a href="#" onclick="showPopup('intro')">학회 소개</a>
         <a href="#" onclick="showPopup('contact')">Contact</a>
         <a href="#" onclick="showPopup('archive')">아카이빙</a>
+        <a href="#" onclick="showPopup('ar-00-01')">무슈 홍</a>
+        <a href="#" onclick="showPopup('ar-00-02')">스윙 베이비</a>
     </div>
 
     <div id="intro" class="popup">
@@ -98,61 +111,290 @@
         <p>여기서는 무질서하게 떠도는 생각들과 다양한 아카이빙 자료들을 확인할 수 있습니다. 의미 없이 떠다니는 것들 속에서 여러분이 찾는 무엇이 있을지도 모릅니다.</p>
     </div>
 
+    <div id="ar-00-01" class="popup">
+        <span class="popup-close" onclick="closePopup('archive')">X</span>
+        <h4>돌아오는 주말, 므슈 홍의 영화와 함께 해보세요</h4>
+        <p><i>A) 아직 주말은 멀었잖아요, 선생님.
+<br><br>
+B) 너... 주말이 멀었다고 생각해?
+<br><br>
+주말이라는 건 있잖아, 니 마음 속에 있는 거야.. 마음 속에!!!
+<br><br>
+C) 아이, 선생님 또 취하셨네. 그만 일어나자.
+<br><br>
+B) 뭘 일어나? 야 너 뭐 돼? 너 뭔데 항상 나한테 이래라 저래라,
+<br><br>
+A) 선생님 원래 취하면 이러세요?
+<br><br>
+C) 하이 참... 일단 담배 한 대 피시구요 선생님. 진정하시고
+<br><br>
+B) 떼잉 쯧...</i>
+<br><br>
+이게 홍상수의 원래 영화였다면 말이에요..
+<br><br>
+미니킴을 만난 이후 므슈 홍의 영화는 상당히 따듯해진...
+<br><br>
+그러나 불편한 감각은 계속 갖고 있는...
+<br><br>
+<i>A) 아직 주말이 멀었네요 선생님~?
+<br><br>
+B) 그러게, 포도 씨는 이번 주말 뭐 하려고?
+<br><br>
+A) 저는 거기 가보려고요. 거기 되게 좋다그 선배들이 그러든데,
+<br><br>
+B) 아 거기? 거기 좋지~ 애들이 참 좋아해~
+<br><br>
+A) 그르니까요. 선생님은 거기 가보셨어요? 언제 가보셨어요?
+<br><br>
+B) 나야 뭐, 언젠가 가봤지 않겠어?</i>
+<br><br>
+이런 느낌.
+<br><br>
+근데 카메라가 보여주기 전까지는 '거기'나 '주말' 같은 건 없는 거거든요.
+<br><br>
+그 엄청 큰 구멍
+<br><br>
+그 주변을 아슬아슬하게 ~ 돌아다니는... 
+<br><br>
+그런 외줄타기의 느낌. 그런데 미니킴이 그 외줄에 같이 타서
+<br><br>
+위태롭긴 하지만 외롭지는 않은 외줄을
+<br><br>
+탈 수 있게 된 거죠.
+<br><br>
+저번 주 라이카시네마에 가서 소설가의 영화를 봤는데
+<br><br>
+영화에 라이카시네마가 나와서 깜짝 놀랐지 멉니까 ㅋㅋ
+<br><br>
+제 앞 자리에 미니킴이 앉아있었더라구요
+<br><br>
+자리 옮기려다가 좀 크리피해서 말았음~
+<br><br>
+근데 라이카 시네마 진짜 조그마하더라구요.
+<br><br>
+로케이션 핑계로 미니킴과 므슈홍이 연희동을 돌아다녔을 생각을 하니
+<br><br>
+정말 외롭지 않은 외줄타기겠구나 생각도 들구요~
+<br><br>
+아무튼 좋은 영화였답니다.
+<br><br>
+친구랑 친구애인과 나랑 셋이 만났는데 친구 커플이 싸울 때 멋쩍게 옆에 있는 그 느낌,
+<br><br>
+친구네 집에 놀러갔는데 친구 엄마가 왜 말도 없이 친구 데려오냐고 친구 혼내는 그 느낌,
+<br><br>
+그걸 픽션이 구현한다?
+<br><br>
+이건 미친 재능이죠~
+<br><br>
+주말에는 므슈홍 미니킴과 함께 줄을 타봐요~<br><br><br>by. 신포도</p>
+    </div>
+
+    <div id="ar-00-02" class="popup">
+        <span class="popup-close" onclick="closePopup('archive')">X</span>
+        <h4>선물 추억팔이 하는 글</h4>
+        <p><img src="https://postfiles.pstatic.net/MjAyMjExMjRfMjUx/MDAxNjY5MjIxNTcxNDg2.4KACc-KnkUgXeDhILX1u2YaYrwQl1z417YYtRjuNR7sg.mirTukGXDM8_s651FG6wU4n-8SMJo6OYpkbf2RhMLPAg.JPEG.iamurd/IMG_1648.JPG?type=w773" width=400 height=400><br>
+성탄절 아침, 방에는 거대한 상자가 있었다. 일 년 내내 울었는데도 방문해준 산타에게 고마워서 또 울고 말았다. 정신없이 포장을 풀어 보니 그 속에는 알록달록한 실내용 어린이 그네가 들어있었다. 
+<br><br>
+다들 이전에 살던 아파트 혹은 동네 공원의 놀이터에 대한 추억을 갖고 있겠지만 항구와 논밭 뿐인 어촌 시골마을에서 자란 나에게 놀이터란 도시의 친지 집에 방문할 때에나 체험해볼 수 있는 것이었다. 때로 할머니와 삼촌이 살던 마포구의 한강아파트에 가게 되는 날이면, 어떤 어린이도 놀러나오지 않는 엄동설한의 놀이터를 나 혼자 쏘다니며 놀곤 했다. 일곱 살 때는 몰랐지만 아무래도 뜬금없이 크리스마스 선물로 그네가 낙점된 연유에는 그런 맥락들이 작용한 것이겠다.
+<br><br>
+그네는 옷방 문틀에 고정된 채로 한 해 이상을 버텼다. 나는 밥을 먹는 시간을 제외하고는 대부분 그네 위에 있었다. 책도 그네 위에서 보고, 음악도 그네 위에서 들었다. 그네는 거의 내 신체에 접붙은 것이나 다름없었다. 
+<br><br>
+다음 해, 그네는 마당의 철제 구조물(아무리 복기해보아도 용도를 알 수 없는)로 옮겨갔다. 학교에서 사귄 친구들이 놀러오면 굳이 집안에 들어오지 않고도 마당에서 열과 성을 다해 놀 수 있었다. 두 명이라면 한 명은 그네에, 한 명은 철제 구조물 위에 매달렸다. 세 명이라면 나머지 한 명이 트램플린을 차지했다. 그러나 대부분의 시간은 혼자였다.
+<br><br>
+당시 우리 동네에는 슈퍼나 편의점이 없었기 때문에, 교회에서 권사 직분을 가지고 있던 옥출 여사님이 읍내에서 과자와 아이스크림들을 공수해 와가지고는 방 한 칸에다 구멍가게를 차려놓고 벌이를 했다. 나는 그 구멍가게의 마지막 손님이자 가장 충성스러운 고객이었다. 집에서 2분가량 걸어가 골목으로 들어간 뒤, 권사님—! 하고 외치면 권사님이 등을 긁적거리며 담이 왔나, 말하고는 가겟방을 열어주곤 했다. 냉동고에서 텔레토비 주물럭 오렌지맛을 5백원에 사고, 마당으로 돌아와 그네에 앉아서 그것을 먹었다. 그런 일은 매일매일 반복됐다. 어린 내가 무슨 생각으로 혼자 그 많은 시간을 지냈는지 기억나지 않는다. 
+<br><br>
+시골은 언제나 적막하지만 명절 연휴가 되면 상경했던 자식들과 그들의 배우자와 손주들로 왁자지껄해졌다. 도시 아이들은 동네를 기웃거리다가 마당에서 나를 발견하면 반갑게 말을 걸어왔다. 이런 시골에도 또래가 있네? 같은 마음이었겠다. 그리고 같이 그네를 탔다. 도시의 생활, 시골의 생활, 텔레비전 프로그램, 만화영화, 아이돌 그룹에 대해서 얘기하면서. 그들은 다음 명절이 되면 곧장 나를 만나러 왔다. 나에게는 그런 친구들이 열 명은 되었다. 일년에 단 두 번씩만 만날 수 있었던 서울, 인천, 대구, 대전의 아이들. 그네 없이는 벌어지지 않았을 사건들을 떠올린다.
+<br><br>
+머리가 클수록 그들의 방문은 드문 일이 되어갔다. 그네는 너무 오래되어 로프가 삭고 버려졌다. 시골에는 오는 사람은 많지 않고 떠나는 사람 뿐이어서, 아마도 그들은 나를 곧 잊어버리고 나만이 그들을 오래 기억했을 것이다. 구멍가게 권사님의 귀는 점점 어두워져서, 나중에는 아무리 권사님을 불러도 듣지 못하게 되었다. 권사님의 청력이 다할 무렵 나도 동네를 떠났다. 벌써 십 년도 더 된 일이다.<br><br><br>by. 통조림</p>
+    </div>
+
     <div id="workers" class="popup">
         <span class="popup-close" onclick="closePopup('workers')">X</span>
         <h4>한국의 직장인들은 좃내 불쌍합니다</h4>
         <p>한국의 직장 문화와 과도한 업무에 시달리는 직장인들의 고충을 보여주는 현실. 뉴럴 난독증 학회는 그들의 분노와 피로를 대변하고자 합니다.</p>
     </div>
 
+    <div id="snobPopup" class="popup">
+        <span class="popup-close" onclick="closePopup('snobPopup')">X</span>
+        <h4>스놉은 청산했다</h4>
+        <p>스놉 좃나 싫어. 위키백과에 따르면 스놉은 다음과 같다. 스노브(snob)는 사회적 지위와 인간의 가치 사이에 연관 관계가 있다고 믿는 사람을 가리키는 경멸적인 단어이다. 스노브는 더 낮은 사회 계층, 교육 수준, 기타 사회 분야의 사람들보다 우월감을 느끼는 사람을 가리키기도 한다. 스노버리(snobbery)라는 단어는 속물근성을 의미하며 1820년대에 잉글랜드에서 처음 사용되기 시작했다. 스놉 최악. 세계에서 탈퇴해라.</p>
+    </div>
+
+ <div id="randomPopup0" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup0')">X</span>
+        <h4>군고구마</h4>
+        <p>Fast Fact!<br>◎ 군고구마는 불 속에서 천천히 가열해 익히기 때문에 내부 온도가 60도 부근으로 오래 유지되어 단맛이 강합니다.<br>◎ 고구마는 조리 과정에서 GI지수가 증가합니다. 생고구마는 GI지수가 55인 반면, 찐고구마는 70, 군고구마는 90까지 올라갑니다.<br>◎ 굽는 과정에서 당 성분이 많아지면서 같은 무게라도 열량이 10~20% 정도 늘어납니다. 100g 기준으로 생고구마가 110㎉ 선인 반면, 군고구마는 140㎉가 됩니다.<br>◎ 당뇨병이 있어 혈당을 철저히 관리해야 하는 사람이라면 군고구마보단 찐고구마를 선택하는 게 좋습니다.<br>◎ 고구마는 1개당 무게가 100~200ｇ 정도로 너무 크지 않고 모양이 고르며 껍질 색이 선명한 것이 좋습니다.<br>◎ 강아지들은 군고구마에 높은 기호성을 보이며, 군고구마 한 조각을 위해 자신이 선보일 수 있는 특기를 모두 쏟아냅니다.</p>
+    </div>
+    <div id="randomPopup1" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup1')">X</span>
+        <h4>Scorpio</h4>
+        <p>I don't give a chance, if they wanna fault
+'Cause there's nothing left to crack
+
+I wanna make a ride
+We're gonna run to forth
+
+Connect the dots, disconnect the line
+Let's shine like Scorpio in the sky
+
+Yeah! Come On! Rock~~
+
+저 별빛의 Reflection
+지평선 향해 사라질 때에
+
+잘게 부숴진 유리 같은
+날카로운 빛으로 눈이 부시게
+어둠을 비추며 Like Shining Stars
+꿈의 파편들을 깊이 새기며
+
+Let's leave it all behind
+So freak that dead line
+Let go
+
+Like Beautiful Green or Orange Sunshine
+Or do I wanna shine G-freakin' head
+So far away I'm gonna find my way
+A to D to D to A
+Try to find the way to the Milky Way
+My world is born in the TRAX
+
+같은 곳 이 시간은 별빛을 갈라
+어둠 가르며 새벽 올 때까지
+
+잘게 부숴진 유리 같은
+날카로운 빛으로 눈이 부시게
+어둠을 비추며 Like Shining Stars
+꿈의 파편들을 깊이 새기며
+
+어둠에서 눈을 뜰 때
+영원을 꿈꾸며 날아오른 순간
+밤하늘 저편 그곳에 웃고 있네
+
+잘게 부숴진 유리 같은
+날카로운 빛으로 눈이 부시게
+어둠을 비추며 Like Shining Stars
+꿈의 파편들을 깊이 새기며
+
+Let the world break me down, as if I care
+I've got nothing to lose,
+Like shattered glass
+Flying to pieces, I'm already torn
+But there's a way to shine, if there's will
+
+Woke up and hated life
+Wanna feel it, what it's likey</p>
+    </div>
+    <div id="randomPopup2" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup2')">X</span>
+        <h4>베르니케 영역</h4>
+        <p>베르니케 영역(Wernicke's area)은 뇌의 좌반구에 위치하는 특정부위로 청각피질과 시각피질로부터 전달된 언어정보의 해석을 담당한다. 말과 글을 이해하는 기능을 하는 언어중추의 한 부분이다. 독일의 신경정신과의사인 칼 베르니케(Carl Wernicke)가 1874년에 자신의 연구결과를 발표함으로 베르니케 영역이 존재한다는 사실이 알려지게 되었다.[1] 그는 자신의 저서 《실어증의 복합증상: 해부학적 기초를 통한 심리학적 연구》를 통해서, 베르니케 영역이 손상되었을 때에는 브로카 실어증과 다른 형태의 언어장애가 발생한다는 사실을 알렸다.[2] 학계에서는 이 부분을 발견자의 이름을 빌려서 베르니케 영역이라 부르고 있다.<br><br>[1]김윤환 <영어 단어 기억의 비밀> 미르에듀 2011년 p98<br>[2][네이버 지식백과] 칼 베르니케 [Carl Wernicke] (두산백과 두피디아, 두산백과)</p>
+    </div>
+    <div id="randomPopup3" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup3')">X</span>
+        <h4>자아 탐구 실패</h4>
+        <p>“실패는 성공의 어머니”와 비슷한 뜻의 표현으로는 “다난흥망多難興邦”이 있습니다. 이는 직역하면 많은 어려움을 겪고 나서야 나라를 일으킬 수 있다는 말로, 힘든 일을 경험하고 이를 극복한 후에야 큰 일을 이룰 수 있다는 비유적 표현입니다.<br><br>하지만 실패에 대한 지나친 관용은 실패의 무게를 가볍게 여기는 부작용과 낮은 성과를 가져올 위험이 있을 수 있습니다.</p>
+    </div>
+    <div id="randomPopup4" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup4')">X</span>
+        <h4>알고리즘의 저주</h4>
+        <p>Increasingly – and often by stealth as they work inside your innocent-looking search engine – algorithms have entered not just our computers and working lives. They also govern more and more eventualities of life in so-called advanced societies and elsewhere.
+
+The existence of algorithms might be a sign of civilization, but it might also be a sign of what French philosopher Foucault calls madness. As human decision-making is handed over to machines, these machines can make rather irrational, discriminatory, and outright mad decisions.
+
+Long gone is the time when algorithms were only used in mathematics, IT, software, and computer science. Historically, the word “algorithm” is an Arabic term meaning a decimal notation of numbers, while in Greek, arithmos is simply a number. Our modern-day arithmos or algorithm came to us via Latin’s algorismus.
+
+In any case, an algorithm is a finite sequence of rigorous instructions. These are used to solve a class of specific problems. Algorithms can also be used to perform computations with feedback loops. Often, they are applied to complete calculations and data processing. More advanced algorithms can even execute automated reasoning.
+
+They are also used in mathematical and logical tests for corporate recruitment purposes. None other than Alan Turing relied on the human-like characteristics as descriptors of a machine that cracked the Nazi code. Later he was driven to suicide by the English establishment, after, of course, he had deciphered the Enigma code, saving thousands of lives.
+
+One of the best and most current definitions of algorithms comes from Cathy O’Neil, who noted that algorithms are opinions put into a mathematical formula. In other words, there is a person who sets up the algorithm for a specific purpose.
+
+It remains imperative to remember that virtually all – rather scientific-looking – algorithms are plagued by hidden interests – often the interest of the users who usually asked an algorithm to be created, e.g., a company like Amazon. In other words, in many cases it is capitalism that drives the design of algorithms.
+
+As a consequence of all this, algorithms increasingly sidestep the role of the subject and even human subjectivity when constructing knowledge, the automatic data analysis based on a mathematical formula. This chisels away the humanist project of the self. Philosophy calls this personhood.
+
+In short, the application of algorithms weakens our ability to form and articulate what we think (e.g., search engine algorithms), what we like (Facebook algorithms), and what we want (Amazon’s algorithms).
+
+Worse, this version of algorithmic knowledge destabilizes a core process in the construction of subjectivity. It eliminates self-reflection by deducing – or even eliminating – the active participation of the individual in the creation of knowledge. Beyond that, algorithms also endeavor to create positivistic and even behavior-manipulating knowledge. Algorithms can eradicate nearly all self-reflective and communicative facets of knowledge creation.
+
+As algorithms are becoming more sophisticated – and are spiced up by artificial intelligence – they have the true potential of becoming independent agents in the formation of our social – and more importantly – our democratic and political society.
+
+It may well be almost inevitable that algorithmic knowledge will attempt to compete with and potentially even bypass, a particular and above all – still! – the unique aspect of being human: our individuality, agency, and subjectivity.
+
+Most deceptively, the apostles of algorithm assure the user that algorithms will grow the realm of personal freedom as these systems offer a richer, much more truthful, and much more precise form of knowledge. The positivist ideology of neutrality is always a helpful vehicle when  corporate interests need to be camouflaged through engineering-like “techno-solutionism” – they misbelieve that all problems have a technical solution.
+
+Essentially algorithms contain the deeply ideological promise to make our workplace and society freer, filled with more emancipated human beings. In reality, algorithms can very easily do the exact opposite. Algorithms – mostly automatically – order data and things. They create a new, and most importantly automated, order of things – the order of the automatic algorithm. Potentially, this might be even worse than what French philosopher Foucault outlined in his seminal masterpiece “The Order of Things”.
+
+In other words, algorithms establish – if not cement and solidify – an existing social and economic order. For algorithms to work, it requires no subjects at all. Instead, human subjects are turned into objects of power, as outlined by the Polish-British philosopher Bauman, though they do not live up to Wittgenstein’s dream of leaving everything as it is.
+
+Wittgenstein may not like it, but algorithmic computer systems do constitute an entirely new regime of knowledge  based on opinionsturned into mathematical equations. And these new systems have – and will continue to have – a huge impact on contemporary work, management as well as social and, of course, consumer life. While gaining increasing importance, the world of algorithms remains largely unregulated and exists outside of the domain of democratically assured regulation.</p>
+    </div>
+    <div id="randomPopup5" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup5')">X</span>
+        <h4>샷의 기법</h4>
+        <p>♧저자: 제레미 바인야드<br>♣옮긴이: 박종호<br>♧그림: 호세 크루즈<br>♣출판사: 비즈앤비즈</p>
+    </div>
+    <div id="randomPopup6" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup6')">X</span>
+        <h4>거북목</h4>
+        <p><img src="https://chs.kdca.go.kr/cscdnhfile/health/healthNewDown/healthInfoFileDown.do?SEQ=1837d72ae6e6"><br><br>거북목 증후군은 장시간 잘못된 자세로 인해 목이 앞으로 빠지는 현상입니다. 이는 현대인의 생활 습관에서 자주 발생하며, 목과 어깨의 통증을 유발할 수 있습니다. 꾸준한 스트레칭과 올바른 자세 유지가 중요합니다.</p>
+    </div>
+    <div id="randomPopup7" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup7')">X</span>
+        <h4>뉴진스 화이팅!</h4>
+        <p>민지, 하니, 다니엘, 해린, 혜인 화이팅!</p>
+    </div>
+    <div id="randomPopup8" class="popup">
+        <span class="popup-close" onclick="closePopup('randomPopup8')">X</span>
+        <h4>한나 아렌트</h4>
+        <p>“현상의 세계로부터 물러날 채비를 갖춘 인간의 정신이 안주할 수 있거나 여태 그래야만 한다고 했던 세계를 믿지 않는다. 그 세계가 과거 세계이든 미래 세계이든 이를 믿지 않는다”</p>
+    </div>
+
+
+
     <script>
         function showPopup(id) {
             var popup = document.getElementById(id);
-            popup.style.display = 'block';
-            dragElement(popup);
+            if (popup) {
+                popup.style.display = 'block';
+                dragElement(popup);
+            } else {
+                console.error('Popup with id ' + id + ' not found.');
+            }
         }
 
         function closePopup(id) {
-            document.getElementById(id).style.display = 'none';
+            var popup = document.getElementById(id);
+            if (popup) {
+                popup.style.display = 'none';
+            } else {
+                console.error('Popup with id ' + id + ' not found.');
+            }
         }
 
         function dragElement(el) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             el.onmousedown = dragMouseDown;
-            el.querySelector('.popup-close').onclick = function (e) {
-                e.stopPropagation();
-                closePopup(el.id);
-            };
-            el.ontouchstart = function(e) {
-                e.preventDefault();
-                dragMouseDown(e);
-            }; // For mobile devices
+            el.ontouchstart = dragMouseDown;
 
             function dragMouseDown(e) {
                 e = e || window.event;
                 e.preventDefault();
-                pos3 = e.touches ? e.touches[0].clientX : e.clientX;
-                pos4 = e.touches ? e.touches[0].clientY : e.clientY;
+                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
+                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
                 document.onmouseup = closeDragElement;
-                document.onmousedown = null;
+                document.ontouchend = closeDragElement;
                 document.onmousemove = elementDrag;
-                document.ontouchend = function(e) {
-                e.preventDefault();
-                closeDragElement();
-            };
-                document.ontouchstart = null;
-                document.ontouchmove = function(e) {
-                e.preventDefault();
-                elementDrag(e);
-            };
+                document.ontouchmove = elementDrag;
             }
 
             function elementDrag(e) {
                 e = e || window.event;
                 e.preventDefault();
-                pos1 = pos3 - (e.touches ? e.touches[0].clientX : e.clientX);
-                pos2 = pos4 - (e.touches ? e.touches[0].clientY : e.clientY);
-                pos3 = e.touches ? e.touches[0].clientX : e.clientX;
-                pos4 = e.touches ? e.touches[0].clientY : e.clientY;
+                pos1 = pos3 - (e.clientX || (e.touches && e.touches[0].clientX));
+                pos2 = pos4 - (e.clientY || (e.touches && e.touches[0].clientY));
+                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
+                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
                 el.style.top = (el.offsetTop - pos2) + "px";
                 el.style.left = (el.offsetLeft - pos1) + "px";
             }
@@ -164,18 +406,36 @@
                 document.ontouchmove = null;
             }
         }
+
+        const randomTexts = [
+            { text: "군고구마", popupId: "randomPopup0" },
+            { text: "Scorpio", popupId: "randomPopup1" },
+            { text: "베르니케 영역", popupId: "randomPopup2" },
+            { text: "자아 탐구 실패", popupId: "randomPopup3" },
+            { text: "알고리즘의 저주", popupId: "randomPopup4" },
+            { text: "샷의 기법", popupId: "randomPopup5" },
+            { text: "거북목", popupId: "randomPopup6" },
+            { text: "뉴진스 화이팅!", popupId: "randomPopup7" },
+            { text: "한나 아렌트", popupId: "randomPopup8" }
+        ];
+
+        function createRandomText() {
+            const randomIndex = Math.floor(Math.random() * randomTexts.length);
+            const randomText = randomTexts[randomIndex];
+            const randomTextElement = document.createElement("div");
+            randomTextElement.className = "random-text";
+            randomTextElement.innerText = randomText.text;
+            randomTextElement.style.top = `${Math.random() * 80 + 10}%`;
+            randomTextElement.style.left = `${Math.random() * 80 + 10}%`;
+            randomTextElement.onclick = () => showPopup(randomText.popupId);
+            document.body.appendChild(randomTextElement);
+
+            setTimeout(() => {
+                document.body.removeChild(randomTextElement);
+            }, 5000);
+        }
+
+        setInterval(createRandomText, 4000);
     </script>
-    <div id="personalSpacePopup" class="popup">
-        <span class="popup-close" onclick="closePopup('personalSpacePopup')">X</span>
-        <h4>퍼스널 스페이스</h4>
-        <p><a href="https://namu.wiki/w/%ED%8D%BC%EC%8A%A4%EB%84%90%20%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4" target="_blank">퍼스널 스페이스에 대해 더 알아보기 (나무위키)</a></p>
-    </div>
-
-    <div id="snobPopup" class="popup">
-        <span class="popup-close" onclick="closePopup('snobPopup')">X</span>
-        <h4>스놉은 청산했다</h4>
-        <p>스놉 좃나 싫어. 위키백과에 따르면 스놉은 다음과 같다. 스노브(snob)는 사회적 지위와 인간의 가치 사이에 연관 관계가 있다고 믿는 사람을 가리키는 경멸적인 단어이다.[1] 스노브는 더 낮은 사회 계층, 교육 수준, 기타 사회 분야의 사람들보다 우월감을 느끼는 사람을 가리키기도 한다. 스노버리(snobbery)라는 단어는 속물근성을 의미하며 1820년대에 잉글랜드에서 처음 사용되기 시작했다. 스놉 최악. 세계에서 탈퇴해라.</p>
-    </div>
-
 </body>
 </html>
