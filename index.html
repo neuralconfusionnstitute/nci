@@ -52,9 +52,11 @@
             z-index: 1000;
             box-sizing: border-box;
             overflow-y: scroll; /* 스크롤을 강제로 표시 */
-            max-height: 90vh;   /* 높이를 조금 더 늘려줘 */
+            max-height: 90vh;   /* 높이를 조금 더 늘려줌 */
+            -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 */
             aria-hidden: true;
         }
+
         .popup-close {
             cursor: pointer;
             color: #D8BFD8;
