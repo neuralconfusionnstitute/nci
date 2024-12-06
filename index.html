@@ -384,14 +384,11 @@ function dragElement(el) {
     if (window.innerWidth > 600) { // 모바일이 아닌 경우에만 드래그 허용
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         el.onmousedown = dragMouseDown;
-        el.querySelector('.popup-close').onclick = function (e) {
-            e.stopPropagation();
-            closePopup(el.id);
-        };
 
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
+            // 드래그 시작 시점 좌표 설정
             pos3 = e.clientX;
             pos4 = e.clientY;
             document.onmouseup = closeDragElement;
@@ -401,10 +398,12 @@ function dragElement(el) {
         function elementDrag(e) {
             e = e || window.event;
             e.preventDefault();
+            // 현재 위치에서의 변위 계산
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
             pos4 = e.clientY;
+            // 팝업의 위치 조정
             el.style.top = (el.offsetTop - pos2) + "px";
             el.style.left = (el.offsetLeft - pos1) + "px";
         }
@@ -415,6 +414,7 @@ function dragElement(el) {
         }
     }
 }
+
 
 
         const randomTexts = [
