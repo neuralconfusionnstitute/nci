@@ -37,35 +37,32 @@
             margin: auto;
             text-align: left;
         }
-        
-.popup {
-    display: none; /* 초기 상태에서 보이지 않게 설정 */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 80vh;
-    overflow-y: auto;
-    touch-action: pan-y;
-    -webkit-overflow-scrolling: touch;
-    resize: none;
-    pointer-events: auto;
-    z-index: 1000;
-    background-color: black;
-    padding: 20px;
-    border: 1px solid #D8BFD8;
-}
-
-.popup-close {
-    cursor: pointer;
-    color: #D8BFD8;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            padding: 20px;
+            border: 1px solid #D8BFD8;
+            box-sizing: border-box;
+            max-width: 80vw;
+            max-height: 80vh;
+            overflow-y: auto;        /* 세로 스크롤 가능 */
+            scroll-behavior: smooth;
+            z-index: 1000;
+            -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 */
+            aria-hidden: true;
+        }
 
 
-
+        .popup-close {
+            cursor: pointer;
+            color: #D8BFD8;
+            float: right;
+            aria-label: "팝업 닫기";
+        }
         .random-text {
             position: fixed;
             color: #D8BFD8;
@@ -73,25 +70,16 @@
             z-index: 999;
             cursor: pointer;
         }
-@media (max-width: 600px) {
-    .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-height: 80vh; /* 팝업의 높이를 고정 */
-        overflow-y: auto; /* 내부에만 스크롤 */
-        touch-action: pan-y; /* 수직 스크롤 동작 허용 */
-        -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
-    }
-
-        .popup.scrollable {
-        overflow-y: auto; /* 스크롤이 필요한 팝업에만 스크롤 추가 */
-        touch-action: pan-y; /* 스와이프 동작 허용 */
-        -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
-    }
-}
-
+        @media (max-width: 600px) {
+            .content, .menu {
+                padding: 10px;
+            }
+            .popup {
+                padding: 15px;
+                width: 95%;
+                max-width: 95vw;
+            }
+        }
     </style>
 </head>
 <body>
@@ -389,74 +377,40 @@ Wittgenstein may not like it, but algorithmic computer systems do constitute an 
             }
         }
 
-function dragElement(el) {
-    // PC에서만 드래그 가능하게 설정
-    if (window.innerWidth > 600) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        el.onmousedown = dragMouseDown;
+        function dragElement(el) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            el.onmousedown = dragMouseDown;
+            el.ontouchstart = dragMouseDown;
 
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 드래그 시작 위치 기록
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
+                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
+                document.onmouseup = closeDragElement;
+                document.ontouchend = closeDragElement;
+                document.onmousemove = elementDrag;
+                document.ontouchmove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - (e.clientX || (e.touches && e.touches[0].clientX));
+                pos2 = pos4 - (e.clientY || (e.touches && e.touches[0].clientY));
+                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
+                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
+                el.style.top = (el.offsetTop - pos2) + "px";
+                el.style.left = (el.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
         }
-
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 위치 조정
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            // 드래그 종료 시 이벤트 해제
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    }
-}
-
-// 팝업 닫기 기능 - 모바일에서 작동하도록 터치 이벤트 추가
-function closePopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) {
-        popup.style.display = 'none';
-    }
-}
-
-// 닫기 버튼에 클릭/터치 이벤트 추가
-document.querySelectorAll('.popup-close').forEach(function(closeButton) {
-    closeButton.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var popupId = this.parentElement.id;
-        closePopup(popupId);
-    });
-
-    closeButton.addEventListener('touchstart', function(e) {
-        e.stopPropagation();
-        var popupId = this.parentElement.id;
-        closePopup(popupId);
-    });
-});
-
-// 팝업 외부 클릭 시 닫기 기능 추가 (모바일과 PC 모두)
-window.addEventListener('click', function(event) {
-    document.querySelectorAll('.popup').forEach(function(popup) {
-        if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
-            popup.style.display = 'none';
-        }
-    });
-});
-
 
         const randomTexts = [
             { text: "군고구마", popupId: "randomPopup0" },
@@ -513,94 +467,6 @@ function closePopup(id) {
 }
 
         </script>
-
-    <!-- 기존 HTML 코드들 -->
-
-<script>
-    // 모든 팝업 초기 상태 설정
-document.addEventListener('DOMContentLoaded', function () {
-    // 페이지 로딩 시 모든 팝업 닫기
-    document.querySelectorAll('.popup').forEach(function (popup) {
-        popup.style.display = 'none';
-    });
-});
-
-// 팝업 열기 함수
-function showPopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) {
-        popup.style.display = 'block';
-        dragElement(popup); // 드래그 기능 추가 (PC 버전)
-    }
-}
-
-// 팝업 닫기 함수
-function closePopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) {
-        popup.style.display = 'none';
-    }
-}
-
-// 닫기 버튼에 클릭 이벤트 추가
-document.querySelectorAll('.popup-close').forEach(function (closeButton) {
-    closeButton.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var popupId = this.parentElement.id;
-        closePopup(popupId);
-    });
-
-    closeButton.addEventListener('touchstart', function (e) {
-        e.stopPropagation();
-        var popupId = this.parentElement.id;
-        closePopup(popupId);
-    });
-});
-
-// 팝업 외부 클릭 시 닫기
-window.addEventListener('click', function (event) {
-    // 팝업이 열려 있을 때, 팝업 외부를 클릭하면 닫기
-    document.querySelectorAll('.popup').forEach(function (popup) {
-        if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
-            popup.style.display = 'none';
-        }
-    });
-});
-
-// PC 버전에서만 팝업 드래그 허용
-function dragElement(el) {
-    if (window.innerWidth > 600) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        el.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-        }
-
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    }
-}
-
-                    </script>
 </body>
 
 
