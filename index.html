@@ -58,6 +58,7 @@
     right: 10px;
 }
 
+
         .random-text {
             position: fixed;
             color: #D8BFD8;
@@ -382,13 +383,15 @@ Wittgenstein may not like it, but algorithmic computer systems do constitute an 
         }
 
 function dragElement(el) {
-    if (window.innerWidth > 600) { // PC에서만 드래그 허용
+    // PC에서만 드래그 가능하게 설정
+    if (window.innerWidth > 600) {
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         el.onmousedown = dragMouseDown;
 
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
+            // 드래그 시작 위치 기록
             pos3 = e.clientX;
             pos4 = e.clientY;
             document.onmouseup = closeDragElement;
@@ -398,6 +401,7 @@ function dragElement(el) {
         function elementDrag(e) {
             e = e || window.event;
             e.preventDefault();
+            // 위치 조정
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
@@ -407,13 +411,14 @@ function dragElement(el) {
         }
 
         function closeDragElement() {
+            // 드래그 종료 시 이벤트 해제
             document.onmouseup = null;
             document.onmousemove = null;
         }
     }
 }
 
-// 팝업 닫기 함수 개선
+// 팝업 닫기 기능 - 모바일에서 작동하도록 터치 이벤트 추가
 function closePopup(id) {
     var popup = document.getElementById(id);
     if (popup) {
@@ -421,7 +426,7 @@ function closePopup(id) {
     }
 }
 
-// 모든 닫기 버튼에 클릭 이벤트 및 터치 이벤트 연결
+// 닫기 버튼에 클릭/터치 이벤트 추가
 document.querySelectorAll('.popup-close').forEach(function(closeButton) {
     closeButton.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -436,7 +441,7 @@ document.querySelectorAll('.popup-close').forEach(function(closeButton) {
     });
 });
 
-// 팝업 외부 클릭 시 팝업 닫기
+// 팝업 외부 클릭 시 닫기 기능 추가 (모바일과 PC 모두)
 window.addEventListener('click', function(event) {
     document.querySelectorAll('.popup').forEach(function(popup) {
         if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
