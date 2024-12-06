@@ -37,7 +37,9 @@
             margin: auto;
             text-align: left;
         }
+        
 .popup {
+    display: none; /* 초기 상태에서 보이지 않게 설정 */
     position: fixed;
     top: 50%;
     left: 50%;
@@ -46,8 +48,12 @@
     overflow-y: auto;
     touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
-    resize: none; /* 팝업 크기 조절 방지 */
-    pointer-events: auto; /* 팝업 내 상호작용 가능 */
+    resize: none;
+    pointer-events: auto;
+    z-index: 1000;
+    background-color: black;
+    padding: 20px;
+    border: 1px solid #D8BFD8;
 }
 
 .popup-close {
@@ -57,6 +63,7 @@
     top: 10px;
     right: 10px;
 }
+
 
 
         .random-text {
@@ -506,6 +513,68 @@ function closePopup(id) {
 }
 
         </script>
+
+    <!-- 기존 HTML 코드들 -->
+
+<script>
+    // 모든 팝업 초기 상태 설정
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.popup').forEach(function (popup) {
+            popup.style.display = 'none'; // 모든 팝업을 처음에는 닫힌 상태로 설정
+        });
+    });
+
+    function showPopup(id) {
+        var popup = document.getElementById(id);
+        if (popup) {
+            popup.style.display = 'block';
+            dragElement(popup);
+        }
+    }
+
+    function closePopup(id) {
+        var popup = document.getElementById(id);
+        if (popup) {
+            popup.style.display = 'none';
+        }
+    }
+
+    document.querySelectorAll('.popup-close').forEach(function (closeButton) {
+        closeButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var popupId = this.parentElement.id;
+            closePopup(popupId);
+        });
+
+        closeButton.addEventListener('touchstart', function (e) {
+            e.stopPropagation();
+            var popupId = this.parentElement.id;
+            closePopup(popupId);
+        });
+    });
+
+    // 팝업 외부 클릭 시 닫기
+    window.addEventListener('click', function (event) {
+        document.querySelectorAll('.popup').forEach(function (popup) {
+            if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
+                closePopup(popup.id);
+            }
+        });
+    });
+
+    // PC 버전에서만 팝업 드래그 허용
+    function dragElement(el) {
+        if (window.innerWidth > 600) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            el.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement
+                    </script>
 </body>
 
 
