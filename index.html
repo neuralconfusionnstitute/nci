@@ -81,6 +81,12 @@
         touch-action: pan-y; /* 수직 스크롤 동작 허용 */
         -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
     }
+
+        .popup.scrollable {
+        overflow-y: auto; /* 스크롤이 필요한 팝업에만 스크롤 추가 */
+        touch-action: pan-y; /* 스와이프 동작 허용 */
+        -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
+    }
 }
 
     </style>
@@ -381,29 +387,31 @@ Wittgenstein may not like it, but algorithmic computer systems do constitute an 
         }
 
 function dragElement(el) {
-    if (window.innerWidth > 600) { // 모바일이 아닌 경우에만 드래그 허용
+    const isScrollable = el.classList.contains('scrollable'); // 스크롤이 필요한 팝업은 'scrollable' 클래스 추가
+
+    if (window.innerWidth > 600 || !isScrollable) { // PC 버전 또는 스크롤이 필요 없는 경우에만 드래그 허용
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         el.onmousedown = dragMouseDown;
+        el.ontouchstart = isScrollable ? null : dragMouseDown; // 스크롤이 필요 없는 팝업만 모바일에서 드래그 가능
 
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // 드래그 시작 시점 좌표 설정
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            pos3 = e.touches ? e.touches[0].clientX : e.clientX;
+            pos4 = e.touches ? e.touches[0].clientY : e.clientY;
             document.onmouseup = closeDragElement;
             document.onmousemove = elementDrag;
+            document.ontouchend = closeDragElement;
+            document.ontouchmove = elementDrag;
         }
 
         function elementDrag(e) {
             e = e || window.event;
             e.preventDefault();
-            // 현재 위치에서의 변위 계산
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // 팝업의 위치 조정
+            pos1 = pos3 - (e.touches ? e.touches[0].clientX : e.clientX);
+            pos2 = pos4 - (e.touches ? e.touches[0].clientY : e.clientY);
+            pos3 = e.touches ? e.touches[0].clientX : e.clientX;
+            pos4 = e.touches ? e.touches[0].clientY : e.clientY;
             el.style.top = (el.offsetTop - pos2) + "px";
             el.style.left = (el.offsetLeft - pos1) + "px";
         }
@@ -411,10 +419,18 @@ function dragElement(el) {
         function closeDragElement() {
             document.onmouseup = null;
             document.onmousemove = null;
+            document.ontouchend = null;
+            document.ontouchmove = null;
         }
     }
 }
 
+function closePopup(id) {
+    var popup = document.getElementById(id);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
 
 
         const randomTexts = [
