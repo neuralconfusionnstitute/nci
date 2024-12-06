@@ -74,10 +74,11 @@
             .content, .menu {
                 padding: 10px;
             }
-            .popup {
-                padding: 15px;
-                width: 95%;
-                max-width: 95vw;
+        .popup {
+            max-height: 80vh; /* 팝업의 높이를 고정해서 넘치는 경우에 스크롤 발생 */
+            overflow-y: auto; /* 내부에만 스크롤 생기게 설정 */
+            touch-action: pan-y; /* 스와이프 동작을 허용해서 자연스럽게 스크롤이 가능하도록 설정 */
+            -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤링을 가능하게 */
             }
         }
     </style>
