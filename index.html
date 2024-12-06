@@ -50,9 +50,11 @@
             max-width: 80vw;
             max-height: 80vh;
             overflow-y: auto;        /* 세로 스크롤 가능 */
+            touch-action: pan-y;
             scroll-behavior: smooth;
             z-index: 1000;
             -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 */
+            resize: none; /*크기 조절 불가능하게 설정*/
             aria-hidden: true;
         }
 
@@ -387,41 +389,44 @@ Wittgenstein may not like it, but algorithmic computer systems do constitute an 
         }
 
 function dragElement(el) {
-    const isScrollable = el.classList.contains('scrollable'); // 스크롤이 필요한 팝업은 'scrollable' 클래스 추가
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-    if (window.innerWidth > 600 || !isScrollable) { // PC 버전 또는 스크롤이 필요 없는 경우에만 드래그 허용
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    // 모바일 환경이 아니라면 드래그 가능하도록 설정
+    if (window.innerWidth > 600) {
         el.onmousedown = dragMouseDown;
-        el.ontouchstart = isScrollable ? null : dragMouseDown; // 스크롤이 필요 없는 팝업만 모바일에서 드래그 가능
+    } else {
+        el.ontouchstart = dragMouseDown; // 모바일에서도 터치 시작 시 드래그 가능
+    }
 
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos3 = e.touches ? e.touches[0].clientX : e.clientX;
-            pos4 = e.touches ? e.touches[0].clientY : e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-            document.ontouchend = closeDragElement;
-            document.ontouchmove = elementDrag;
-        }
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.touches ? e.touches[0].clientX : e.clientX;
+        pos4 = e.touches ? e.touches[0].clientY : e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+        document.ontouchend = closeDragElement;
+        document.ontouchmove = elementDrag;
+    }
 
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos1 = pos3 - (e.touches ? e.touches[0].clientX : e.clientX);
-            pos2 = pos4 - (e.touches ? e.touches[0].clientY : e.clientY);
-            pos3 = e.touches ? e.touches[0].clientX : e.clientX;
-            pos4 = e.touches ? e.touches[0].clientY : e.clientY;
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
-        }
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - (e.touches ? e.touches[0].clientX : e.clientX);
+        pos2 = pos4 - (e.touches ? e.touches[0].clientY : e.clientY);
+        pos3 = e.touches ? e.touches[0].clientX : e.clientX;
+        pos4 = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        // 팝업 위치 조정 (크기는 고정된 상태로 위치만 이동하도록)
+        el.style.top = (el.offsetTop - pos2) + "px";
+        el.style.left = (el.offsetLeft - pos1) + "px";
+    }
 
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-            document.ontouchend = null;
-            document.ontouchmove = null;
-        }
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.ontouchend = null;
+        document.ontouchmove = null;
     }
 }
 
@@ -431,6 +436,21 @@ function closePopup(id) {
         popup.style.display = 'none';
     }
 }
+
+// 모바일 닫기 버튼 작동 문제 해결
+document.querySelectorAll('.popup-close').forEach(function(closeButton) {
+    closeButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var popupId = this.parentElement.id;
+        closePopup(popupId);
+    });
+
+    closeButton.addEventListener('touchstart', function(e) {
+        e.stopPropagation();
+        var popupId = this.parentElement.id;
+        closePopup(popupId);
+    });
+});
 
 
         const randomTexts = [
