@@ -70,17 +70,19 @@
             z-index: 999;
             cursor: pointer;
         }
-        @media (max-width: 600px) {
-            .content, .menu {
-                padding: 10px;
-            }
-        .popup {
-            max-height: 80vh; /* 팝업의 높이를 고정해서 넘치는 경우에 스크롤 발생 */
-            overflow-y: auto; /* 내부에만 스크롤 생기게 설정 */
-            touch-action: pan-y; /* 스와이프 동작을 허용해서 자연스럽게 스크롤이 가능하도록 설정 */
-            -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤링을 가능하게 */
-            }
-        }
+@media (max-width: 600px) {
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 80vh; /* 팝업의 높이를 고정 */
+        overflow-y: auto; /* 내부에만 스크롤 */
+        touch-action: pan-y; /* 수직 스크롤 동작 허용 */
+        -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
+    }
+}
+
     </style>
 </head>
 <body>
@@ -378,40 +380,42 @@ Wittgenstein may not like it, but algorithmic computer systems do constitute an 
             }
         }
 
-        function dragElement(el) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            el.onmousedown = dragMouseDown;
-            el.ontouchstart = dragMouseDown;
+function dragElement(el) {
+    if (window.innerWidth > 600) { // 모바일이 아닌 경우에만 드래그 허용
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        el.onmousedown = dragMouseDown;
+        el.querySelector('.popup-close').onclick = function (e) {
+            e.stopPropagation();
+            closePopup(el.id);
+        };
 
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
-                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
-                document.onmouseup = closeDragElement;
-                document.ontouchend = closeDragElement;
-                document.onmousemove = elementDrag;
-                document.ontouchmove = elementDrag;
-            }
-
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos1 = pos3 - (e.clientX || (e.touches && e.touches[0].clientX));
-                pos2 = pos4 - (e.clientY || (e.touches && e.touches[0].clientY));
-                pos3 = e.clientX || (e.touches && e.touches[0].clientX);
-                pos4 = e.clientY || (e.touches && e.touches[0].clientY);
-                el.style.top = (el.offsetTop - pos2) + "px";
-                el.style.left = (el.offsetLeft - pos1) + "px";
-            }
-
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-                document.ontouchend = null;
-                document.ontouchmove = null;
-            }
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
         }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            el.style.top = (el.offsetTop - pos2) + "px";
+            el.style.left = (el.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+}
+
 
         const randomTexts = [
             { text: "군고구마", popupId: "randomPopup0" },
