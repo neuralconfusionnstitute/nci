@@ -40,14 +40,17 @@
         .popup {
             display: none;
             position: fixed;
-            left: 0;
-            top: 0;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
             background-color: black;
             padding: 20px;
             border: 1px solid #D8BFD8;
             box-sizing: border-box;
-            max-width: 80vw
+            max-width: 80vw;
+            max-height: 80vh;
             overflow-y: auto;        /* 세로 스크롤 가능 */
+            scroll-behavior: smooth;
             z-index: 1000;
             -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 */
             aria-hidden: true;
