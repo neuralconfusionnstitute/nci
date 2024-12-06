@@ -518,62 +518,88 @@ function closePopup(id) {
 
 <script>
     // 모든 팝업 초기 상태 설정
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.popup').forEach(function (popup) {
-            popup.style.display = 'none'; // 모든 팝업을 처음에는 닫힌 상태로 설정
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    // 페이지 로딩 시 모든 팝업 닫기
+    document.querySelectorAll('.popup').forEach(function (popup) {
+        popup.style.display = 'none';
+    });
+});
+
+// 팝업 열기 함수
+function showPopup(id) {
+    var popup = document.getElementById(id);
+    if (popup) {
+        popup.style.display = 'block';
+        dragElement(popup); // 드래그 기능 추가 (PC 버전)
+    }
+}
+
+// 팝업 닫기 함수
+function closePopup(id) {
+    var popup = document.getElementById(id);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
+// 닫기 버튼에 클릭 이벤트 추가
+document.querySelectorAll('.popup-close').forEach(function (closeButton) {
+    closeButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var popupId = this.parentElement.id;
+        closePopup(popupId);
     });
 
-    function showPopup(id) {
-        var popup = document.getElementById(id);
-        if (popup) {
-            popup.style.display = 'block';
-            dragElement(popup);
-        }
-    }
+    closeButton.addEventListener('touchstart', function (e) {
+        e.stopPropagation();
+        var popupId = this.parentElement.id;
+        closePopup(popupId);
+    });
+});
 
-    function closePopup(id) {
-        var popup = document.getElementById(id);
-        if (popup) {
+// 팝업 외부 클릭 시 닫기
+window.addEventListener('click', function (event) {
+    // 팝업이 열려 있을 때, 팝업 외부를 클릭하면 닫기
+    document.querySelectorAll('.popup').forEach(function (popup) {
+        if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
             popup.style.display = 'none';
         }
+    });
+});
+
+// PC 버전에서만 팝업 드래그 허용
+function dragElement(el) {
+    if (window.innerWidth > 600) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        el.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            el.style.top = (el.offsetTop - pos2) + "px";
+            el.style.left = (el.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
     }
+}
 
-    document.querySelectorAll('.popup-close').forEach(function (closeButton) {
-        closeButton.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var popupId = this.parentElement.id;
-            closePopup(popupId);
-        });
-
-        closeButton.addEventListener('touchstart', function (e) {
-            e.stopPropagation();
-            var popupId = this.parentElement.id;
-            closePopup(popupId);
-        });
-    });
-
-    // 팝업 외부 클릭 시 닫기
-    window.addEventListener('click', function (event) {
-        document.querySelectorAll('.popup').forEach(function (popup) {
-            if (popup.style.display === 'block' && !popup.contains(event.target) && !event.target.classList.contains('popup-close')) {
-                closePopup(popup.id);
-            }
-        });
-    });
-
-    // PC 버전에서만 팝업 드래그 허용
-    function dragElement(el) {
-        if (window.innerWidth > 600) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            el.onmousedown = dragMouseDown;
-
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement
                     </script>
 </body>
 
